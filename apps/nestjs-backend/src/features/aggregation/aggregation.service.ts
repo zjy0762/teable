@@ -496,7 +496,9 @@ export class AggregationService {
         .groupQuery(
           qb,
           fieldInstanceMap,
-          groupBy.map((item) => item.fieldId)
+          groupBy.map((item) => item.fieldId),
+          undefined,
+          undefined
         )
         .appendGroupBuilder();
     }
