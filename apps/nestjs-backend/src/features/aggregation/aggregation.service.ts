@@ -763,6 +763,7 @@ export class AggregationService implements IAggregationService {
       searchFields,
       queryRo,
       tableIndex,
+      undefined, // context
       basicSortIndex,
       filterQuery,
       sortQuery
