@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  app:
+    image: teable/teable:latest
+    ports:
+      - "${PORT:-8080}:3000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/teable
+      - REDIS_URL=redis://redis:6379
+      - NEXTAUTH_SECRET=your-secret-key-here
+      - NEXTAUTH_URL=http://localhost:${PORT:-8080}
+      - STORAGE_TYPE=local
+      - STORAGE_LOCAL_PATH=/app/data/storage
+    volumes:
+      - ${DATA_DIR:-./data}/storage:/app/data/storage
+    depends_on:
+      - db
+      - redis
+    restart: unless-stopped
+
+  db:
+    image: postgres:14-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=teable
+    volumes:
+      - ${DATA_DIR:-./data}/pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  redis:
+    image: redis:alpine
+    volumes:
+      - ${DATA_DIR:-./data}/redis:/data
+    restart: unless-stopped
